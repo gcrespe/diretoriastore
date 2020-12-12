@@ -1,23 +1,57 @@
 import React from 'react';
 import { View, Text, Dimensions, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { useToast } from 'react-native-styled-toast'
-import MenuComponent from '../../components/menu/menu';
+import { inject, observer } from 'mobx-react'
+import { Stores } from '../../stores/stores';
+import { produtoQuantidade } from '../../stores/carrinho/CarrinhoStore';
 const { width, height } = Dimensions.get('screen');
 
 interface ProdutoProps{
     navigation: any;
     route: any;
+    store: typeof Stores;
 }
 
-const Produto = (props: ProdutoProps) => {
+const Produto = inject('store')(observer((props: ProdutoProps) => {
 
     const {item} = props.route.params;
     const {toast}  = useToast();
+    const {carrinhoStore} = Stores;
     const {navigation} = props;
+    const [quantidade, setQuantidade] = React.useState<number>(0);
+
+    const adicionarProduto = () => {
+        
+        try{
+
+            setQuantidade(quantidade+1);
+
+            const produtoAdicionado: produtoQuantidade = {
+                produto: item,
+                quantidade: quantidade,
+            }
+    
+            carrinhoStore.produtosCarrinho.push(produtoAdicionado);
+    
+        }catch(e){
+
+            throw(e);
+        
+        }finally{
+
+            toast({
+                message: `${item.nome} adicionado ao carrinho` ,
+                color: "#000000"
+            })
+
+        }
+
+    }
     
     return (
         <>
             <View style={{backgroundColor: "#FFFFFF", height: height, alignContent: "center", alignItems: 'center'}}>
+                {console.log(item)}
                 <View style={{height: height*0.25}}>
                     <View style={{width: width*0.5, height: height*0.15, alignContent: "center", justifyContent: "center", alignItems: 'center'}}>
                         <View style={{width: width*0.95, flexDirection: "row", justifyContent: 'space-evenly', marginRight: '35%', marginTop: '10%'}}>
@@ -52,10 +86,7 @@ const Produto = (props: ProdutoProps) => {
                 <View style={{width: width, alignContent: "center", justifyContent: "center", alignItems: 'center', height: height*0.1}}>
                     <TouchableHighlight
                         style={{width: width*0.6, height: height*0.06, alignContent: "center", justifyContent: "center", alignItems: 'center', backgroundColor: "#000000", borderRadius: 10}} 
-                        onPress={() => {toast({
-                            message: `${item.nome} adicionado ao carrinho` ,
-                            color: "#000000"
-                        })}}>
+                        onPress={() => adicionarProduto()}>
                         <Text style={{color: '#FFFFFF'}}>
                             Adicionar ao carrinho
                         </Text>
@@ -64,6 +95,6 @@ const Produto = (props: ProdutoProps) => {
             </View>
         </>
     )
-}
+}))
 
 export default Produto;

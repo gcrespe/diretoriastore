@@ -40,6 +40,7 @@ const MenuComponent = (props: MenuProps) => {
         <View style={{alignItems: 'center', justifyContent: 'center' }}>
         <Menu
             ref={setMenuRef}
+            animationDuration={250}
             button={
                 <TouchableOpacity onPress={showMenu}>
                     <Image source={require('../../assets/img/menu-icon.png')} style={{tintColor: '#000000'}} resizeMode={"center"}/>

@@ -3,76 +3,51 @@ import api from '../../services/api/api'
 
 
 export interface ProdutoDTO{
+    id: number,
     nome?: string,
     descricao?: string,
     preco?: string,
     estoque?: number,
+    created_at: Date,
+    updated_at: Date,
+    id_categoria: number,
 }
 
 export class ProdutosStore {
 
     @observable produtos: ProdutoDTO[] = [
         {
-            descricao: 'asdadssad',
+            id: 1,
+            id_categoria: 1,
+            created_at: new Date(),
+            updated_at: new Date(),
+            descricao: 'vaisefude',
             estoque: 10,
-            nome: 'Produto 1',
+            nome: 'O tal do produtola',
             preco: '100',
         },
         {
-            descricao: 'asdadssad',
+            id: 1,
+            id_categoria: 1,
+            created_at: new Date(),
+            updated_at: new Date(),
+            descricao: 'vaisefude',
             estoque: 10,
-            nome: 'Produto 1',
+            nome: 'O tal do produtola',
             preco: '100',
         },
         {
-            descricao: 'asdadssad',
+            id: 1,
+            id_categoria: 1,
+            created_at: new Date(),
+            updated_at: new Date(),
+            descricao: 'vaisefude',
             estoque: 10,
-            nome: 'Produto 1',
+            nome: 'O tal do produtola',
             preco: '100',
-        },
-        {
-            descricao: 'asdadssad',
-            estoque: 10,
-            nome: 'Produto 1',
-            preco: '100',
-        },
-        {
-            descricao: 'asdadssad',
-            estoque: 10,
-            nome: 'Produto 1',
-            preco: '100',
-        },
-        {
-            descricao: 'asdadssad',
-            estoque: 10,
-            nome: 'Produto 1',
-            preco: '100',
-        },
-        {
-            descricao: 'asdadssad',
-            estoque: 10,
-            nome: 'Produto 1',
-            preco: '100',
-        },
-        {
-            descricao: 'asdadssad',
-            estoque: 10,
-            nome: 'Produto 1',
-            preco: '100',
-        },
-        {
-            descricao: 'asdadssad',
-            estoque: 10,
-            nome: 'Produto 1',
-            preco: '100',
-        },
-        {
-            descricao: 'asdadssad',
-            estoque: 10,
-            nome: 'Produto 1',
-            preco: '100',
-        },
+        }
     ];
+    
     @observable carregado: boolean = false;
 
     @action.bound 

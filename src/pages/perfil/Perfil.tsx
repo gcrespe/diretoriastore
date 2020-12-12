@@ -47,7 +47,7 @@ const Perfil = inject('store')(observer((props: PerfilProps) => {
                         
                         <View style={{borderBottomWidth: 0.2, width: width*0.85, paddingTop: 20}}/>
                         <Text style={{paddingTop: 20, letterSpacing: 5, fontSize: 12}}>
-                            PRODUTOS
+                            Perfil
                         </Text>
                     </View>
                     <View style={{flexDirection: "column", width: width, justifyContent: "center", paddingTop: 30, alignContent: "center", alignItems: "center"}}>

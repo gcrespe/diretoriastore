@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Dimensions, Image, TouchableOpacity } from 'react-native';
 import MenuComponent from '../../components/menu/menu';
 import { Stores } from '../../stores/stores';
+import { inject, observer } from 'mobx-react'
 const { width, height } = Dimensions.get('screen');
 
 interface CarrinhoProps{
@@ -10,9 +11,38 @@ interface CarrinhoProps{
 }
 
 
-const Carrinho = (props: CarrinhoProps) => {
+const Carrinho = inject('store')(observer((props: CarrinhoProps) => {
 
     const {navigation} = props;
+    const { carrinhoStore } = Stores;
+
+    const carrinhoVazio = () => {
+        return (
+            <>
+                <View style={{width: width, height: height*0.55, alignContent: "center", justifyContent: "center", alignItems: 'center', flexDirection: "column"}}>
+                    <Image 
+                        source={require('../../assets/img/cartempty.png')}
+                        resizeMode={"center"}
+                    />
+                </View>
+                <View style={{width: width, alignContent: "center", justifyContent: "center", alignItems: 'center'}}>
+                    <Text style={{color: "#000000", fontSize: 16}}>
+                        Ainda não tem nada por aqui...
+                    </Text>
+                </View>
+            </>
+        )
+    }
+
+    const carrinhoComProdutos = () => {
+        return (
+            <>
+                <View style={{width: width, height: height*0.55, alignContent: "center", justifyContent: "center", alignItems: 'center', flexDirection: "column"}}>
+                   
+                </View>
+            </>
+        )
+    }
 
     return (
         <>
@@ -33,21 +63,17 @@ const Carrinho = (props: CarrinhoProps) => {
                         Carrinho
                     </Text>
                 </View>
-                <View style={{width: width, height: height*0.55, alignContent: "center", justifyContent: "center", alignItems: 'center', flexDirection: "column"}}>
-                    <Image 
-                        source={require('../../assets/img/cartempty.png')}
-                        resizeMode={"center"}
-                    />
-                </View>
-                <View style={{width: width, alignContent: "center", justifyContent: "center", alignItems: 'center'}}>
-                    <Text style={{color: "#000000", fontSize: 16}}>
-                        Ainda não tem nada por aqui...
-                    </Text>
-                </View>
+                {
+                    carrinhoStore.produtosCarrinho.length === 0 
+                    
+                        ? carrinhoVazio()
+                        : carrinhoComProdutos()
+
+                }
                
             </View>
         </>
     )
-}
+}))
 
 export default Carrinho;

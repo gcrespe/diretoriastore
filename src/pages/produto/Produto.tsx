@@ -24,15 +24,42 @@ const Produto = inject('store')(observer((props: ProdutoProps) => {
         
         try{
 
-            setQuantidade(quantidade+1);
+            const quant = quantidade + 1;
 
             const produtoAdicionado: produtoQuantidade = {
-                produto: item,
-                quantidade: quantidade,
+                produto: {
+                    created_at: new Date(),
+                    id: item.id,
+                    id_categoria: item.id_categoria,
+                    updated_at: new Date(),
+                    descricao: item.descricao,
+                    estoque: item.estoque,
+                    nome: item.nome,
+                    preco: item.preco,
+                },
+                quantidade: quant,
+            }    
+
+            setQuantidade(quant+1); 
+
+            if(carrinhoStore.produtosCarrinho.find(element => {
+
+                return element.produto.id === item.id
+            
+            }) == undefined){
+
+                carrinhoStore.produtosCarrinho.push(produtoAdicionado);
+            
+            }else{
+            
+                carrinhoStore.produtosCarrinho.forEach((element) => {
+                    if(element.produto.id == item.id){
+                        element.quantidade++;
+                    }
+                })
+            
             }
-    
-            carrinhoStore.produtosCarrinho.push(produtoAdicionado);
-    
+
         }catch(e){
 
             throw(e);
@@ -51,7 +78,6 @@ const Produto = inject('store')(observer((props: ProdutoProps) => {
     return (
         <>
             <View style={{backgroundColor: "#FFFFFF", height: height, alignContent: "center", alignItems: 'center'}}>
-                {console.log(item)}
                 <View style={{height: height*0.25}}>
                     <View style={{width: width*0.5, height: height*0.15, alignContent: "center", justifyContent: "center", alignItems: 'center'}}>
                         <View style={{width: width*0.95, flexDirection: "row", justifyContent: 'space-evenly', marginRight: '35%', marginTop: '10%'}}>
@@ -62,7 +88,7 @@ const Produto = inject('store')(observer((props: ProdutoProps) => {
                                 DIRETORIA STORE
                             </Text>
                         </View>
-                    <View style={{borderBottomWidth: 0.2, width: width*0.85, paddingTop: 20}}/>
+                    <View style={{borderBottomWidth: 0.2, width: width*0.9, paddingTop: 20}}/>
                         <Text style={{paddingTop: 20, letterSpacing: 5, fontSize: 12}}>
                             {item.nome} - R${item.preco}
                         </Text>
@@ -83,7 +109,7 @@ const Produto = inject('store')(observer((props: ProdutoProps) => {
                         {item.descricao}
                     </Text>
                 </View>
-                <View style={{width: width, alignContent: "center", justifyContent: "center", alignItems: 'center', height: height*0.1}}>
+                <View style={{width: width, alignContent: "center", justifyContent: "center", alignItems: 'center', height: height*0.1, bottom: 80, position: 'absolute'}}>
                     <TouchableHighlight
                         style={{width: width*0.6, height: height*0.06, alignContent: "center", justifyContent: "center", alignItems: 'center', backgroundColor: "#000000", borderRadius: 10}} 
                         onPress={() => adicionarProduto()}>

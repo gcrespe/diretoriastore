@@ -9,6 +9,6 @@ export interface produtoQuantidade{
 
 export default class CarrinhoStore{
 
-    @observable produtosCarrinho: produtoQuantidade[] = {} as []; 
+    @observable produtosCarrinho: produtoQuantidade[] = new Array(); 
 
 }

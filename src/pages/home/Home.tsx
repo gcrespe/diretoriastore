@@ -5,6 +5,7 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { inject, observer } from 'mobx-react'
 import { Stores } from '../../stores/stores';
 import  MenuComponent  from '../../components/menu/menu'
+import { ProdutoDTO } from '../../stores/produtos/ProdutosStore';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -27,12 +28,15 @@ const Home = inject('store')(observer((props: HomeProps) => {
     }, [])
 
     const renderItem = ({item}: any) => {
+
+        const itemReal: ProdutoDTO = item;
+        
         return (
             <View style={{margin: 12}}>
                 <TouchableOpacity 
                     style={{borderWidth: 0.2, width: width*0.385, height: height*0.26, borderRadius: 5, zIndex: 30}} 
                     onPress={() => navigation.navigate('Produto', {
-                        item: item,
+                        item: itemReal,
                     })}
                 >
                     <View style={{height: height*0.26, justifyContent: "space-between", flexDirection: "column"}}>
@@ -73,7 +77,7 @@ const Home = inject('store')(observer((props: HomeProps) => {
                     </View>
                     
                     <View style={{borderBottomWidth: 0.2, width: width*0.85, paddingTop: 20}}/>
-                    <Text style={{paddingTop: 30, letterSpacing: 5, fontSize: 12}}>
+                    <Text style={{paddingTop: 20, letterSpacing: 5, fontSize: 12}}>
                         Home
                     </Text>
                 </View>
@@ -83,7 +87,13 @@ const Home = inject('store')(observer((props: HomeProps) => {
                         data={produtosStore.produtos}
                         numColumns={2}
                     />
-                    
+                </View>
+                <View style={{width: width, height: height*0.07, position: 'absolute', bottom: 70, backgroundColor: '#ffffff', alignContent: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#b0b0b0'}}>
+                    <TouchableOpacity style={{width: '100%', height: '100%'}}>
+                        <Text style={{textAlign: 'center', paddingTop: '4%'}}>
+                            Escolher filtros
+                        </Text>
+                    </TouchableOpacity>
                 </View>    
             </View>
         </>

@@ -36,9 +36,9 @@ class App extends React.Component{
         <ThemeProvider theme={theme}>
           <ToastProvider>
             <NavigationContainer>
-              <Stack.Navigator initialRouteName={'Home'}>
-                <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+              <Stack.Navigator>
                 <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
+                <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
                 <Stack.Screen name="Carrinho" component={Carrinho} options={{ headerShown: false }}/>
                 <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false }}/>
                 <Stack.Screen name="Cadastro" component={Cadastro} options={{ headerShown: false }}/>

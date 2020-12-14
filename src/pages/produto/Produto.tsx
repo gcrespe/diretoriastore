@@ -80,7 +80,7 @@ const Produto = inject('store')(observer((props: ProdutoProps) => {
             <View style={{backgroundColor: "#FFFFFF", height: height, alignContent: "center", alignItems: 'center'}}>
                 <View style={{height: height*0.25}}>
                     <View style={{width: width*0.5, height: height*0.15, alignContent: "center", justifyContent: "center", alignItems: 'center'}}>
-                        <View style={{width: width*0.95, flexDirection: "row", justifyContent: 'space-evenly', marginRight: '35%', marginTop: '10%'}}>
+                        <View style={{width: width*0.95, flexDirection: "row", justifyContent: 'space-evenly', marginRight: '35%', marginTop: '30%'}}>
                             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                                 <Image source={require('../../assets/img/arrow-icon.png')} style={{tintColor: '#000000', width: 30, height: 30}} resizeMode={"center"}/>
                             </TouchableOpacity>
@@ -89,8 +89,11 @@ const Produto = inject('store')(observer((props: ProdutoProps) => {
                             </Text>
                         </View>
                     <View style={{borderBottomWidth: 0.2, width: width*0.9, paddingTop: 20}}/>
+                        <Text style={{paddingTop: 20, letterSpacing: 5, fontSize: 12, textAlign: 'center'}}>
+                            {item.nome}
+                        </Text>
                         <Text style={{paddingTop: 20, letterSpacing: 5, fontSize: 12}}>
-                            {item.nome} - R${item.preco}
+                            R${item.preco}
                         </Text>
                     </View>
                 </View>
@@ -105,7 +108,7 @@ const Produto = inject('store')(observer((props: ProdutoProps) => {
                     </Text>
                 </View>
                 <View style={{width: width*0.9, alignContent: "center", justifyContent: "center", alignItems: 'center', marginTop: -height*0.03}}>
-                    <Text style={{paddingTop: 20}}>
+                    <Text style={{paddingTop: 20, textAlign: 'center'}}>
                         {item.descricao}
                     </Text>
                 </View>

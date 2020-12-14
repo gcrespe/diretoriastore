@@ -4,6 +4,7 @@ import MenuComponent from '../../components/menu/menu';
 import { Stores } from '../../stores/stores';
 import { inject, observer } from 'mobx-react'
 import { FlatList } from 'react-native-gesture-handler';
+import  ModalComponent  from '../../components/modal/modal'
 const { width, height } = Dimensions.get('screen');
 
 interface CarrinhoProps{
@@ -17,21 +18,45 @@ const Carrinho = inject('store')(observer((props: CarrinhoProps) => {
     const {navigation} = props;
     const { carrinhoStore } = Stores;
     const [render, setRender] = React.useState<boolean>(false);
+    const [modal, setModal] = React.useState<boolean>(false);
 
     const aumentaQuantidade = (id: number) => {
-        carrinhoStore.produtosCarrinho.forEach((element) => {
+        let splice: boolean = false;
+        carrinhoStore.produtosCarrinho.forEach((element, index) => {
             if(element.produto.id == id){
                 element.quantidade++;
+                if(element.quantidade == 0){
+                    carrinhoStore.produtosCarrinho.splice(index, 1);
+                }
             }
         })
         render;
         setRender(!render)
     }
 
+    const renderSwitch  = (idcategoria: number) => {
+        console.log(idcategoria)
+        switch(idcategoria) {
+            case 0:
+            return 'Camisetas';
+            case 1:
+            return 'Tênis';
+            case 2:
+            return 'Calças';
+            case 3:
+            return 'Underwear';
+            default:
+            break;
+        }
+    }
+
     const diminuiQuantidade = (id: number) => {
-        carrinhoStore.produtosCarrinho.forEach((element) => {
+        carrinhoStore.produtosCarrinho.forEach((element, index) => {
             if(element.produto.id == id){
                 element.quantidade--;
+                if(element.quantidade == 0){
+                    carrinhoStore.produtosCarrinho.splice(index, 1);
+                }
             }
         })
         render;
@@ -64,15 +89,15 @@ const Carrinho = inject('store')(observer((props: CarrinhoProps) => {
                     <Image source={require('../../assets/img/shopping.png')} resizeMode={'center'} style={{width: 60, height: 60}}/>
                 </View>
                 <View style={{width: '80%', height: '100%', padding: 7, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <View style={{flexDirection: 'column', justifyContent: 'space-evenly', paddingLeft: 10}}>
+                    <View style={{width: width*0.4, flexDirection: 'column', justifyContent: 'space-evenly', paddingLeft: 10}}>
                         <Text>
                             {item.produto.nome}
                         </Text>
                         <Text>
-                            {item.produto.id_categoria}
+                            {renderSwitch(item.produto.id_categoria)}
                         </Text>
                     </View>
-                    <View style={{flexDirection: 'column', justifyContent: 'space-evenly', alignContent: 'flex-end', marginLeft: 50}}>
+                    <View style={{flexDirection: 'column', justifyContent: 'space-evenly', alignContent: 'flex-end'}}>
                         <Text style={{textAlign: 'right'}}>
                             R$ {item.produto.preco * item.quantidade}
                         </Text>
@@ -80,7 +105,7 @@ const Carrinho = inject('store')(observer((props: CarrinhoProps) => {
                             Qtd: {item.quantidade}
                         </Text>
                     </View>
-                    <View style={{width: '10%', height: 70, justifyContent: 'space-evenly', marginRight: 10, marginTop: -3}}>
+                    <View style={{width: '10%', height: 70, justifyContent: 'space-evenly', marginTop: -3}}>
                         <TouchableOpacity style={{borderWidth: 0.3, borderColor: 'b0b0b0', borderRadius: 7, width: 25, height: 25, justifyContent: 'center'}} onPress={() => aumentaQuantidade(item.produto.id)}>
                             <Text style={{fontSize: 15, textAlign: 'center'}}>
                                 +
@@ -106,13 +131,6 @@ const Carrinho = inject('store')(observer((props: CarrinhoProps) => {
                         renderItem={renderProdutoCarrinho}
                         numColumns={1}
                     />
-                    <View style={{width: width, height: height*0.1, position: 'absolute', bottom: 0, backgroundColor: '#ffffff', alignContent: 'center', justifyContent: 'center'}}>
-                        <TouchableOpacity style={{width: '50%', height: '55%', borderWidth: 1, borderColor: '#b0b0b0', borderRadius: 10, alignSelf: 'center', justifyContent: 'center', alignContent: 'center'}}>
-                            <Text style={{textAlign: 'center'}}>
-                                Concluir pedido
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
             </>
         )
@@ -121,6 +139,17 @@ const Carrinho = inject('store')(observer((props: CarrinhoProps) => {
     return (
         <>
             <View style={{backgroundColor: "#FFFFFF", height: height}}>
+                {
+                carrinhoStore.produtosCarrinho.length == 0
+                    
+                    ? null
+                    : <View style={{marginTop: 740, marginLeft: 180, position: 'absolute', zIndex: 10}}>
+                            <ModalComponent navigation={navigation}/>
+                        </View>
+
+                }
+
+                
                 <View style={{width: width, height: height*0.17, alignContent: "center", justifyContent: "center", alignItems: 'center'}}>
                     <View style={{width: width, flexDirection: "row", justifyContent: 'space-evenly', marginBottom: -10, zIndex: 2}}>
                         <TouchableOpacity onPress={() => navigation.navigate('Carrinho')} disabled={true}>
@@ -137,10 +166,9 @@ const Carrinho = inject('store')(observer((props: CarrinhoProps) => {
                         Carrinho
                     </Text>
                 </View>
-                {console.log(carrinhoStore.produtosCarrinho.length)}
                 {
                     
-                    carrinhoStore.produtosCarrinho.length == 0
+                     carrinhoStore.produtosCarrinho.length == 0
                     
                         ? carrinhoVazio()
                         : carrinhoComProdutos()

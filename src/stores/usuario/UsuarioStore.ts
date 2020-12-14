@@ -23,6 +23,7 @@ class UsuarioStore {
     @observable token: any;
     @observable id: number = -1 as number;
     @observable status: number = 0 as number;
+    @observable error: any;
     
     @computed
     @action async auth(email: string, senha: string){
@@ -54,8 +55,10 @@ class UsuarioStore {
         })
         .then((res) => {
             this.usuario = res.data;
+            console.log(res.statusText)
         })
         .catch((e) => {
+            this.error = true;
             throw e;
         })
     }

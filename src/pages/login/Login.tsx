@@ -52,14 +52,14 @@ const Login = inject('store')(observer((props: LoginProps)  => {
         <KeyboardAvoidingView behavior={"position"}>
             <View style={{backgroundColor: "#FFFFFF", height: height}}>
                 <View style={{width: width, height: height*0.4, alignContent: "center", justifyContent: "center", alignItems: 'center'}}>
-                        <Text style={{paddingTop: 20, letterSpacing: 5}}>
-                            DIRETORIA STORE
-                        </Text>
-                        <View style={{borderBottomWidth: 0.2, width: width*0.85, paddingTop: 20}}/>
-                        <Text style={{paddingTop: 20, letterSpacing: 5, fontSize: 12}}>
-                            CLOTHING
-                        </Text>
-                    </View>
+                    <Text style={{paddingTop: 20, letterSpacing: 5}}>
+                        DIRETORIA STORE
+                    </Text>
+                    <View style={{borderBottomWidth: 0.2, width: width*0.85, paddingTop: 20}}/>
+                    <Text style={{paddingTop: 20, letterSpacing: 5, fontSize: 12}}>
+                        CLOTHING
+                    </Text>
+                </View>
                 <View style={{width: width, height: height*0.30, alignContent: "center", justifyContent: "space-evenly", alignItems: "center"}}>
                     <View>
                         <Text style={{letterSpacing: 3}}>

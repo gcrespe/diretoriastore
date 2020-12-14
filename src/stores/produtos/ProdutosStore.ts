@@ -15,39 +15,8 @@ export interface ProdutoDTO{
 
 export class ProdutosStore {
 
-    @observable produtos: ProdutoDTO[] = [
-        {
-            id: 1,
-            id_categoria: 1,
-            created_at: new Date(),
-            updated_at: new Date(),
-            descricao: 'vaisefude',
-            estoque: 10,
-            nome: 'Produto 1',
-            preco: '100',
-        },
-        {
-            id: 2,
-            id_categoria: 1,
-            created_at: new Date(),
-            updated_at: new Date(),
-            descricao: 'vaisefude',
-            estoque: 10,
-            nome: 'Produto 2',
-            preco: '69',
-        },
-        {
-            id: 3,
-            id_categoria: 1,
-            created_at: new Date(),
-            updated_at: new Date(),
-            descricao: 'vaisefude',
-            estoque: 10,
-            nome: 'Produto 3',
-            preco: '75',
-        }
-    ];
-    
+    @observable produtos: ProdutoDTO[] = [];
+    @observable produtosTodos: ProdutoDTO[] = [];
     @observable carregado: boolean = false;
 
     @action.bound 
@@ -56,6 +25,7 @@ export class ProdutosStore {
         await api.get(`/produtos`)
             .then((res) => {
                 this.produtos = res.data;
+                this.produtosTodos = res.data;
             })
             .catch((e) => {
                 throw e;

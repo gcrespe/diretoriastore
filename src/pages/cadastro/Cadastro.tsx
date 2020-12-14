@@ -42,6 +42,15 @@ const Cadastro = (props: CadastroProps) => {
                 })
             })
         }catch(e){
+            if(userStore.error){
+                toast({
+                    message: 'Ocorreu um erro durante o cadastro, verifique o email inserido',
+                    accentColor: 'red',
+                    iconColor: 'red',
+                    iconFamily: "FontAwesome",
+                })
+            }
+            console.log(e);
             throw e;
         }
     }

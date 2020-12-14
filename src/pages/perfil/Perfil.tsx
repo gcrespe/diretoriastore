@@ -1,9 +1,8 @@
-import React from 'react';
-import { View, Text, Dimensions, ScrollView, TouchableHighlight, Image} from 'react-native';
+import React, {useEffect} from 'react';
+import { View, Text, Dimensions, ScrollView, Image} from 'react-native';
 import { inject, observer } from 'mobx-react';
 import { Stores } from '../../stores/stores';
-import { useToast } from 'react-native-styled-toast'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import MenuComponent from '../../components/menu/menu';
 
 const { width, height } = Dimensions.get('screen');
@@ -16,24 +15,73 @@ interface PerfilProps{
 
 const Perfil = inject('store')(observer((props: PerfilProps) => {
 
-    const { userStore } = Stores;
+    const { userStore, carrinhoStore } = Stores;
     const { navigation } = props;
+    const [render, setRender] = React.useState<boolean>(false)
 
-    const {toast}  = useToast();
+    useEffect(() => {
 
-    const handleLogout = () => {
-        navigation.navigate('Login');
-        toast({
-            message: 'Logout realizado!',
-            color: "#c0c0c0"
-        })
-        userStore.reset();
+        carrinhoStore.getPedidos();
+        
+        setRender(!render);
+
+    }, [])
+
+    const renderProdutoCarrinho = ({item}: any) => {
+
+        return(
+            <View style={{width: width*0.9, height: height*0.12, borderWidth: 0.3, borderColor: 'b0b0b0', borderRadius: 7, flexDirection: 'row', marginVertical: 10, marginBottom: 20}}>
+                <View style={{width: '100%', height: '100%', padding: 7, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flexDirection: 'column', justifyContent: 'space-evenly', paddingLeft: 10}}>
+                        <Text>
+                            Cod. pedido: {item.codigo}
+                        </Text>
+                    </View>
+                    <View style={{flexDirection: 'column', justifyContent: 'space-evenly', alignContent: 'flex-end', marginLeft: 30}}>
+                        <Text style={{textAlign: 'right', paddingRight: 10}}>
+                            Feito em: {item.created_at.slice(0,10)}
+                        </Text>
+                        <Text style={{textAlign: 'right', paddingRight: 10}}>
+                            Status: {item.status}
+                        </Text>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
+    const pedidos = () => {
+        return (
+            <>
+                <View style={{width: width, alignContent: "center", alignItems: 'center', flexDirection: "column"}}>
+                    {carrinhoStore.pedidos.length == 0
+                        ?
+                            <Text style={{fontSize: 14, alignSelf: 'center', marginTop: 10}}>
+                                Nenhum pedido foi realizado ainda.
+                            </Text>
+                        :
+                        <ScrollView> 
+                            <FlatList
+                            data={carrinhoStore.pedidos}
+                            renderItem={renderProdutoCarrinho}
+                            numColumns={1}
+                            />
+                            <View style={{height: height*0.1}}>
+
+                            </View>
+                        </ScrollView>
+
+                    }
+                    {console.log(carrinhoStore.pedidos)}
+                </View>
+            </>
+        )
     }
 
     return (
         <>
-            <ScrollView style={{backgroundColor: "#FFFFFF", height: height}}>
-                <View style={{alignContent: "center", justifyContent: "center", alignItems: "center"}}>
+            <View style={{backgroundColor: "#FFFFFF", height: height}}>
+                <ScrollView style={{width: width, height: height, alignContent: "center"}} contentContainerStyle={{justifyContent: "center", alignItems: 'center'}}>
                     <View style={{width: width, height: height*0.17, alignContent: "center", justifyContent: "center", alignItems: 'center'}}>
                         <View style={{width: width, flexDirection: "row", justifyContent: 'space-evenly', marginBottom: -10}}>
                             <TouchableOpacity onPress={() => navigation.navigate('Carrinho')}>
@@ -86,18 +134,16 @@ const Perfil = inject('store')(observer((props: PerfilProps) => {
                             </Text>
                         </View>
                     </View>
-                    <View style={{width: width*0.85, height: height*0.1, flexDirection: "row", justifyContent: "space-around", paddingTop: 25}}>
-                        <TouchableHighlight 
-                            style={{width: width*0.3, height: height*0.05, alignContent: "center", justifyContent: "center", alignItems: 'center', backgroundColor: "#000000", borderRadius: 10}} 
-                            onPress={() => handleLogout()}
-                        >
-                            <Text style={{color: '#FFFFFF', letterSpacing: 2}}>
-                                Logout
+                    <View style={{width: width}}>
+                        <View style={{width: width, justifyContent: 'center', marginBottom: 20}}>
+                            <Text style={{alignSelf: 'center', fontSize: 20, letterSpacing: 2}}>
+                                Pedidos
                             </Text>
-                        </TouchableHighlight>
+                        </View>
+                        {pedidos()}
                     </View>
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </View>
         </>
     )
 }))
